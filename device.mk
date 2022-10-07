@@ -428,6 +428,8 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/mediatek \
     hardware/mediatek/libmtkperf_client \
+    hardware/google/interfaces \
+    hardware/google/pixel
 
 # Vibrator
 PRODUCT_PACKAGES += \
