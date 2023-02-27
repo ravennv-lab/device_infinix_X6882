@@ -7,6 +7,9 @@
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 33
 
+# Dynamic partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
