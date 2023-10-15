@@ -46,7 +46,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.default \
     android.hardware.boot-service.default_recovery
-    
+
 # Dalvik configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
