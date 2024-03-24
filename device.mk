@@ -182,7 +182,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	LineageApertureOverlayTarget \
     LineageDialerOverlayTarget \
-    LineageSettingsOverlayTarget
+    LineageSettingsOverlayTarget \
+    PowerOffAlarmOverlayTarget
 
 # Linker config
 PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
@@ -243,11 +244,6 @@ PRODUCT_PACKAGES += \
     SystemUIResTarget \
     TetheringConfigTarget \
     WifiResTarget
-
-PRODUCT_PACKAGES += \
-    LineageApertureOverlayX6739 \
-    LineageDialerOverlayX6739 \
-    LineageSettingsOverlayX6739
 
 # Permissions
 PRODUCT_COPY_FILES += \
