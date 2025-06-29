@@ -393,16 +393,6 @@ PRODUCT_PACKAGES += \
     android.hardware.radio.config@1.3.vendor \
     android.hardware.radio@1.6.vendor
 
-# Required for QPR3
-PRODUCT_PACKAGES += \
-    liblz4.vendor \
-    libmemunreachable.vendor \
-    libhidlbase_shim \
-    libjsoncpp.vendor \
-    libziparchive.vendor \
-    libsqlite.vendor \
-    libdumpstateutil.vendor
-
 # Secure Element
 PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2.vendor
@@ -420,6 +410,18 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+
+# Shims
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-convert-shared.vendor \
+    libpower.vendor \
+    liblz4.vendor \
+    libmemunreachable.vendor \
+    libhidlbase_shim \
+    libjsoncpp.vendor \
+    libziparchive.vendor \
+    libsqlite.vendor \
+    libdumpstateutil.vendor
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
