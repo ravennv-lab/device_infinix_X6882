@@ -370,6 +370,7 @@ PRODUCT_COPY_FILES += \
 # Wi-Fi
 PRODUCT_PACKAGES += \
     wpa_supplicant \
+    lib_driver_cmd_mt66xx \
     hostapd \
     libwifi-hal-mt66xx \
     android.hardware.wifi@1.0-service-lazy
