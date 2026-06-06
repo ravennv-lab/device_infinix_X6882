@@ -47,32 +47,40 @@ PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 $(call inherit-product, $(SRC_TARGET_DIR)/product/userspace_reboot.mk)
 
 # Audio
+$(call soong_config_set,android_hardware_audio,run_64bit,true)
+$(call soong_config_set_bool,android_hardware_audio,skip_speaker_layout_channel_mask_field,true)
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.0-impl \
-    android.hardware.audio.effect@7.0-impl \
+    android.hardware.audio@7.0-impl:64 \
+    android.hardware.audio.effect@7.0-impl:64 \
     android.hardware.audio.service \
-    android.hardware.bluetooth.audio-impl \
-    android.hardware.soundtrigger@2.3-impl
+    android.hardware.bluetooth.audio-impl:64 \
+    android.hardware.soundtrigger@2.3-impl:64
 
 PRODUCT_PACKAGES += \
-    audio.bluetooth.default \
-    audio.primary.default \
-    audio.r_submix.default \
-    audio.usb.default
+    audio.primary.default:64 \
+    audio.bluetooth.default:64 \
+    audio.r_submix.default:64 \
+    audio.usb.default:64
 
 PRODUCT_PACKAGES += \
-    audio_policy.stub \
-    libopus.vendor \
-    audioclient-types-aidl-cpp.vendor \
-    libaudioroute.vendor \
-    libaudiofoundation.vendor \
-    libbluetooth_audio_session \
-    libalsautils \
-    libnbaio_mono \
-    libtinycompress \
-    libdynproc \
-    libhapticgenerator \
-    libprocessgroup.vendor
+    audio_policy.stub:64 \
+    libopus.vendor:64 \
+    audioclient-types-aidl-cpp.vendor:64 \
+    libaudioroute.vendor:64 \
+    libaudiofoundation.vendor:64 \
+    libbundlewrapper:64 \
+    libbluetooth_audio_session:64 \
+    libaudiopreprocessing:64 \
+    libalsautils:64 \
+    libdownmix:64 \
+    libeffectproxy:64 \
+    libnbaio_mono:64 \
+    libtinycompress:64 \
+    libdynproc:64 \
+    libhapticgenerator:64 \
+    libldnhncr:64 \
+    libreverbwrapper:64 \
+    libprocessgroup.vendor:64
 
 PRODUCT_PACKAGES += \
     MtkInCallService
@@ -82,7 +90,12 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_param/SpeechVol_AudioParam.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_param/SpeechVol_AudioParam.xml
 
 # Bluetooth
 PRODUCT_PACKAGES += \
