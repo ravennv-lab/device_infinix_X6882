@@ -158,6 +158,10 @@ PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.1-impl-mock \
     fastbootd
 
+# Fingerprint
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.1.vendor:64
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-service \
