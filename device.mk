@@ -110,17 +110,38 @@ PRODUCT_PACKAGES += \
     com.android.hardware.boot \
     android.hardware.boot-service.default_recovery
 
-# Display
+# Camera
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.3-service \
-    android.hardware.memtrack-service.mediatek-mali
+    android.hardware.camera.common@1.0.vendor \
+    android.hardware.camera.device@3.6.vendor \
+    android.hardware.camera.provider@2.6.vendor
 
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@4.0.vendor \
-    android.hardware.graphics.mapper@4.0.vendor \
-    libion.vendor \
-    libui.vendor \
-    libdrm.vendor
+    libdng_sdk.vendor \
+    libexpat.vendor \
+    libexif.vendor \
+    libpiex \
+    libpng.vendor
+
+# Control groups/Task profiles
+PRODUCT_COPY_FILES += \
+    system/core/libprocessgroup/profiles/cgroups.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
+    system/core/libprocessgroup/profiles/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
+# Display
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.3-service:64 \
+    android.hardware.memtrack-service.mediatek:64
+
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@4.0.vendor:64 \
+    android.hardware.graphics.mapper@4.0.vendor:64 \
+    libion.vendor:64 \
+    libui.vendor:64 \
+    libdrm.vendor:64
+
+PRODUCT_PACKAGES += \
+    ANGLE
 
 # DRM
 PRODUCT_PACKAGES += \
