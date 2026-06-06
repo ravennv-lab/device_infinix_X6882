@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# AAPT
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xxhdpi
+
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
@@ -11,6 +15,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.m
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS := \
     boot \
+    dtbo \
     odm_dlkm \
     product \
     system \
@@ -25,21 +30,21 @@ AB_OTA_PARTITIONS := \
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system=erofs \
+    FILESYSTEM_TYPE_system=$(BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE) \
     POSTINSTALL_OPTIONAL_system=true
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_vendor=true \
     POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
-    FILESYSTEM_TYPE_vendor=erofs \
+    FILESYSTEM_TYPE_vendor=$(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE) \
     POSTINSTALL_OPTIONAL_vendor=true
 
 PRODUCT_PACKAGES += \
+    checkpoint_gc \
+    otapreopt_script \
     update_engine \
     update_engine_sideload \
-    update_verifier \
-    otapreopt_script \
-    checkpoint_gc
+    update_verifier
 
 PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 
@@ -57,32 +62,30 @@ PRODUCT_PACKAGES += \
     android.hardware.soundtrigger@2.3-impl:64
 
 PRODUCT_PACKAGES += \
-    audio.primary.default:64 \
     audio.bluetooth.default:64 \
+    audio.primary.default:64 \
     audio.r_submix.default:64 \
     audio.usb.default:64
 
 PRODUCT_PACKAGES += \
-    audio_policy.stub:64 \
-    libopus.vendor:64 \
     audioclient-types-aidl-cpp.vendor:64 \
-    libaudioroute.vendor:64 \
+    audio_policy.stub:64 \
     libaudiofoundation.vendor:64 \
-    libbundlewrapper:64 \
-    libbluetooth_audio_session:64 \
     libaudiopreprocessing:64 \
+    libaudioroute.vendor:64 \
     libalsautils:64 \
+    libbluetooth_audio_session:64 \
+    libbundlewrapper:64 \
     libdownmix:64 \
-    libeffectproxy:64 \
-    libnbaio_mono:64 \
-    libtinycompress:64 \
     libdynproc:64 \
+    libeffectproxy:64 \
     libhapticgenerator:64 \
     libldnhncr:64 \
+    libnbaio_mono:64 \
+    libopus.vendor:64 \
+    libprocessgroup.vendor:64 \
     libreverbwrapper:64 \
-    libprocessgroup.vendor:64
-
-PRODUCT_PACKAGES += \
+    libtinycompress:64 \
     MtkInCallService
 
 PRODUCT_COPY_FILES += \
@@ -90,8 +93,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
 PRODUCT_COPY_FILES += \
@@ -107,8 +110,8 @@ PRODUCT_PACKAGES += \
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    com.android.hardware.boot \
-    android.hardware.boot-service.default_recovery
+    android.hardware.boot-service.default_recovery \
+    com.android.hardware.boot
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -136,9 +139,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@4.0.vendor \
     android.hardware.graphics.mapper@4.0.vendor \
+    libdrm.vendor \
     libion.vendor \
-    libui.vendor \
-    libdrm.vendor
+    libui.vendor
 
 PRODUCT_PACKAGES += \
     ANGLE
@@ -189,15 +192,21 @@ PRODUCT_PACKAGES += \
 
 # HIDL
 PRODUCT_PACKAGES += \
-    android.hidl.base@1.0 \
     android.hidl.allocator@1.0 \
-    android.hidl.base@1.0.vendor \
     android.hidl.allocator@1.0.vendor \
+    android.hidl.base@1.0 \
+    android.hidl.base@1.0.vendor \
+    libhidlmemory.vendor \
     libhidltransport \
     libhidltransport.vendor \
-    libhidlmemory.vendor \
     libhwbinder \
     libhwbinder.vendor
+
+# Inherit common MediaTek IMS
+$(call inherit-product, vendor/mediatek/ims/ims.mk)
+
+# Include GSI keys
+$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
 # Init files
 PRODUCT_PACKAGES += \
@@ -206,8 +215,8 @@ PRODUCT_PACKAGES += \
     init_connectivity.rc \
     init.connectivity.common.rc \
     init.connectivity.rc \
-    init.insmod.sh \
     init.insmod.mt6789.cfg \
+    init.insmod.sh \
     init.modem.rc \
     init.mt6789.power.rc \
     init.mt6789.rc \
@@ -217,15 +226,6 @@ PRODUCT_PACKAGES += \
     init.recovery.usb.rc \
     init.sensor_2_0.rc \
     ueventd.mt6789.rc
-
-# Inherit common MediaTek IMS
-$(call inherit-product, vendor/mediatek/ims/ims.mk)
-
-# Shipping API level
-PRODUCT_SHIPPING_API_LEVEL := 33
-
-# Include GSI keys
-$(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
 # Keylayout
 PRODUCT_COPY_FILES += \
@@ -240,22 +240,21 @@ PRODUCT_PACKAGES += \
 
 # Keymint
 PRODUCT_PACKAGES += \
-    android.hardware.security.keymint-V1-ndk_platform.vendor \
-    android.hardware.security.secureclock-V1-ndk_platform.vendor \
-    android.hardware.security.sharedsecret-V1-ndk_platform.vendor \
-    android.hardware.security.rkp-V3-ndk.vendor \
+    android.hardware.security.keymint-V1-ndk.vendor:64 \
+    android.hardware.security.rkp-V3-ndk.vendor:64 \
+    android.hardware.security.secureclock-V1-ndk.vendor:64 \
+    android.hardware.security.sharedsecret-V1-ndk.vendor:64 \
     libcppbor_external.vendor:64
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.lights-service.transsion
+    android.hardware.light-service.lineage
 
 # Lineage-Specific Overlays
 PRODUCT_PACKAGES += \
-	LineageApertureOverlayTarget \
+    LineageApertureOverlayTarget \
     LineageDialerOverlayTarget \
-    LineageSettingsOverlayTarget \
-    PowerOffAlarmOverlayTarget
+    LineageSettingsOverlayTarget
 
 # Linker config
 PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
@@ -265,16 +264,16 @@ PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
 $(call soong_config_set_bool,android_hardware_mediatek_codec2,link_v33_libstagefright_foundation,true)
 PRODUCT_PACKAGES += \
     android.hardware.media.c2-mtk-service \
+    libavservices_minijail_vendor:64 \
+    libcodec2_soft_common.vendor:64 \
     libcodec2_vndk.vendor:64 \
     libeffects:64 \
     libeffectsconfig.vendor:64 \
-    libavservices_minijail_vendor:64 \
-    libstagefright_softomx_plugin.vendor:64 \
-    libsfplugin_ccodec_utils.vendor:64 \
-    libcodec2_soft_common.vendor:64 \
     libflatbuffers-cpp.vendor:64 \
     libminijail:64 \
-    libminijail.vendor:64
+    libminijail.vendor:64 \
+    libsfplugin_ccodec_utils.vendor:64 \
+    libstagefright_softomx_plugin.vendor:64
 
 PRODUCT_PACKAGES += \
     android.hardware.cas@1.2-service-lazy
@@ -290,7 +289,7 @@ PRODUCT_PACKAGES += \
 
 # NFC
 PRODUCT_PACKAGES += \
-    android.hardware.nfc@1.2.vendor \
+    android.hardware.nfc-service.nxp \
     com.android.nfc_extras \
     Tag
 
@@ -298,11 +297,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
     FrameworksResTarget \
-    SettingsResTarget \
+    OpenDeltaOverlayMT6789 \
     SettingsProviderResTarget \
+    SettingsResTarget \
     SystemUIResTarget \
     TetheringConfigTarget \
-    OpenDeltaOverlayMT6789 \
     WifiResTarget
 
 # Permissions
@@ -362,21 +361,22 @@ PRODUCT_PACKAGES += \
     android.hardware.power-service.pixel-libperfmgr
 
 PRODUCT_PACKAGES += \
-    vendor.mediatek.hardware.mtkpower@1.2-service.stub \
+    android.hardware.power@1.3.vendor \
     vendor.mediatek.hardware.mtkpower@1.0.vendor \
-    vendor.mediatek.hardware.mtkpower@1.1.vendor
-
-PRODUCT_PACKAGES += \
-    android.hardware.power@1.3.vendor
+    vendor.mediatek.hardware.mtkpower@1.1.vendor \
+    vendor.mediatek.hardware.mtkpower@1.2-service.stub
 
 # Power | Dummy mtkperf lib
 PRODUCT_PACKAGES += \
-    libmtkperf_client_vendor \
-    libmtkperf_client
+    libmtkperf_client \
+    libmtkperf_client_vendor
 
 # Power configurations
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gralloc/mdp.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gralloc/mdp.xml
 
 # Project ID Quota
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
@@ -399,14 +399,14 @@ PRODUCT_PACKAGES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    libsensorndkbridge:64 \
-    android.hardware.sensors@1.0.vendor:64 \
-    android.hardware.sensors@2.1.vendor:64 \
     android.frameworks.sensorservice@1.0:64 \
     android.frameworks.sensorservice@1.0.vendor:64 \
-    android.hardware.sensors-service.multihal \
+    android.hardware.sensors@1.0.vendor:64 \
+    android.hardware.sensors@2.0-ScopedWakelock.vendor:64 \
     android.hardware.sensors@2.0-subhal-impl-1.0 \
-    android.hardware.sensors@2.0-ScopedWakelock.vendor:64
+    android.hardware.sensors@2.1.vendor:64 \
+    android.hardware.sensors-service.multihal \
+    libsensorndkbridge:64
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
@@ -414,22 +414,25 @@ PRODUCT_COPY_FILES += \
 # Shims
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-convert-shared.vendor \
-    libpower.vendor \
-    liblz4.vendor \
-    libmemunreachable.vendor \
+    libdumpstateutil.vendor \
     libhidlbase_shim \
     libjsoncpp.vendor \
-    libziparchive.vendor \
+    liblz4.vendor \
+    libmemunreachable.vendor \
+    libpower.vendor \
     libsqlite.vendor \
-    libdumpstateutil.vendor
+    libziparchive.vendor
+
+# Shipping API level
+PRODUCT_SHIPPING_API_LEVEL := 33
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
-    hardware/mediatek \
-    hardware/mediatek/libmtkperf_client \
     hardware/google/interfaces \
-    hardware/google/pixel
+    hardware/google/pixel \
+    hardware/mediatek \
+    hardware/mediatek/libmtkperf_client
 
 # Thermal
 PRODUCT_PACKAGES += \
@@ -459,27 +462,27 @@ PRODUCT_PACKAGES += \
 # VNDK
 PRODUCT_PACKAGES += \
     libbase_shim \
-    libprocessgroup_shim \
     libcamera_metadata_shim \
+    libprocessgroup_shim \
     libstagefright_foundation-v33 \
     libtinyxml2-v34
 
 PRODUCT_PACKAGES += \
-    libutils-v31 \
-    libhidlbase-v31 \
     libbinder-v31 \
+    libhidlbase-v31 \
     libunwindstack.vendor \
-    libutilscallstack.vendor
+    libutilscallstack.vendor \
+    libutils-v31
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
-    libwifi-hal-wrapper \
     android.hardware.wifi-service \
-    wpa_supplicant \
-    lib_driver_cmd_mt66xx \
     hostapd \
+    lib_driver_cmd_mt66xx \
+    libkeystore-engine-wifi-hidl:64 \
     libkeystore-wifi-hidl:64 \
-    libkeystore-engine-wifi-hidl:64
+    libwifi-hal-wrapper:64 \
+    wpa_supplicant
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/infinix/X6882/X6882-vendor.mk)
