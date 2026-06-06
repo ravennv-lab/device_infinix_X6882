@@ -261,32 +261,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
     $(LOCAL_PATH)/configs/linker.config.json
 
-# MediaCas
+# Media
+$(call soong_config_set_bool,android_hardware_mediatek_codec2,link_v33_libstagefright_foundation,true)
 PRODUCT_PACKAGES += \
-    android.hardware.cas@1.2-service-lazy
-
-# Media (C2)
-PRODUCT_PACKAGES += \
-    android.hardware.media.c2@1.0.vendor:64 \
-    android.hardware.media.c2@1.1.vendor:64 \
-    android.hardware.media.c2@1.2.vendor:64 \
-    android.hardware.media.omx@1.0-service \
-    libcodec2_hidl@1.2.vendor:64 \
-    libcodec2_hidl_plugin:64 \
+    android.hardware.media.c2-mtk-service \
     libcodec2_vndk.vendor:64 \
     libeffects:64 \
     libeffectsconfig.vendor:64 \
-    libavservices_minijail_vendor \
-    libstagefright_softomx_plugin.vendor \
-    libsfplugin_ccodec_utils.vendor \
-    libcodec2_soft_common.vendor \
-    libflatbuffers-cpp.vendor
+    libavservices_minijail_vendor:64 \
+    libstagefright_softomx_plugin.vendor:64 \
+    libsfplugin_ccodec_utils.vendor:64 \
+    libcodec2_soft_common.vendor:64 \
+    libflatbuffers-cpp.vendor:64 \
+    libminijail:64 \
+    libminijail.vendor:64
 
 PRODUCT_PACKAGES += \
-    libchrome.vendor
+    android.hardware.cas@1.2-service-lazy
 
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/seccomp,$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy) \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media,$(TARGET_COPY_OUT_VENDOR)/etc)
 
 # Neural networks
