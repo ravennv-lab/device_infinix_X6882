@@ -457,29 +457,29 @@ PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.mediatek
 
 # VNDK
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v32/arm64/arch-arm-armv8-a/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libutils-v32.so \
-    prebuilts/vndk/v32/arm64/arch-arm64-armv8-a/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libutils-v32.so
+PRODUCT_PACKAGES += \
+    libbase_shim \
+    libprocessgroup_shim \
+    libcamera_metadata_shim \
+    libstagefright_foundation-v33 \
+    libtinyxml2-v34
 
 PRODUCT_PACKAGES += \
+    libutils-v31 \
+    libhidlbase-v31 \
+    libbinder-v31 \
     libunwindstack.vendor \
     libutilscallstack.vendor
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
+    libwifi-hal-wrapper \
+    android.hardware.wifi-service \
     wpa_supplicant \
     lib_driver_cmd_mt66xx \
     hostapd \
-    libwifi-hal-mt66xx \
-    android.hardware.wifi@1.0-service-lazy
-
-PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0.vendor \
-    android.hardware.tetheroffload.control@1.0.vendor \
-    android.hardware.tetheroffload.control@1.1.vendor
-
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/wifi/,$(TARGET_COPY_OUT_VENDOR)/etc/wifi)
+    libkeystore-wifi-hidl:64 \
+    libkeystore-engine-wifi-hidl:64
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/infinix/X6882/X6882-vendor.mk)
