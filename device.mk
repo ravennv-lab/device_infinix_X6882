@@ -218,6 +218,9 @@ PRODUCT_PACKAGES += \
     init.sensor_2_0.rc \
     ueventd.mt6789.rc
 
+# Inherit common MediaTek IMS
+$(call inherit-product, vendor/mediatek/ims/ims.mk)
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 33
 
